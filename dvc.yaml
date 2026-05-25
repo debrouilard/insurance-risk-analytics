@@ -1,0 +1,43 @@
+# dvc.yaml - Insurance Risk Analytics Pipeline
+
+stages:
+
+  # Stage 1: Prepare / Clean Data
+  prepare:
+    cmd: python src/data_loader.py
+    deps:
+      - src/data_loader.py
+      - data/raw/insurance_data.csv
+    outs:
+      - data/cleaned/insurance_data_cleaned.csv
+
+  # Stage 2: Exploratory Data Analysis
+  eda:
+    cmd: jupyter nbconvert --execute --to notebook --inplace notebooks/01_eda.ipynb
+    deps:
+      - notebooks/01_eda.ipynb
+      - src/data_loader.py
+      - src/eda_utils.py
+      - data/cleaned/insurance_data_cleaned.csv
+    outs:
+      - notebooks/01_eda.ipynb
+
+  # Stage 3: Hypothesis Testing (you can add later)
+  hypothesis:
+    cmd: jupyter nbconvert --execute --to notebook --inplace notebooks/02_hypothesis_testing.ipynb
+    deps:
+      - notebooks/02_hypothesis_testing.ipynb
+      - src/hypothesis_tests.py
+      - data/cleaned/insurance_data_cleaned.csv
+    outs:
+      - notebooks/02_hypothesis_testing.ipynb
+
+  # Stage 4: Modeling (you can add later)
+  modeling:
+    cmd: jupyter nbconvert --execute --to notebook --inplace notebooks/03_modeling.ipynb
+    deps:
+      - notebooks/03_modeling.ipynb
+      - src/modeling.py
+      - data/cleaned/insurance_data_cleaned.csv
+    outs:
+      - notebooks/03_modeling.ipynb
